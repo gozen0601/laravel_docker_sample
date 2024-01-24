@@ -1,4 +1,11 @@
-FROM php:8.2-fpm
+FROM php:8.2-apache
+
+ADD php.ini /usr/local/etc/php/
+
+RUN cd /etc/apache2/mods-enabled \
+    && ln -s ../mods-available/rewrite.load
+
+ADD 000-default.conf /etc/apache2/sites-enabled/
 
 # 必要なパッケージをインストール
 RUN apt-get update \
