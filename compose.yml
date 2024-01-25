@@ -7,23 +7,26 @@ services:
       - '8080:80'
     volumes:
       - ./laravel-project:/var/www/laravel-project
+      - ./docker/php-fpm/php.ini:/usr/local/etc/php/php.ini
       - vendor-volume:/var/www/laravel-project/vendor # 動作が遅いことへの対策
       - storage-volume:/var/www/laravel-project/storage  # 動作が遅いことへの対策
+    depends_on:
+      - postgres
 
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
+  postgres:
+    image: postgres:14
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: database
-      MYSQL_USER: db-user
-      MYSQL_PASSWORD: db-pass
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGPASSWORD: postgres
+      POSTGRES_DB: main
       TZ: "Asia/Tokyo"
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    volumes:
-      - ./docker/db/data:/var/lib/mysql
     ports:
-      - 3306:3306
+      - 5432:5432 #MySQLと違うので注意
+    volumes:
+      - ./docker/postgres/data:/var/lib/postgresql/data
+      - ./docker/postgres/logs:/var/log
 
 # 動作が遅いことへの対策
 volumes: 
