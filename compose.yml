@@ -1,20 +1,21 @@
 services:
 
-  php-fpm:
-    container_name: php-fpm
-    build: ./docker/php-fpm
+  app:
+    container_name: app
+    build: ./docker/php
     ports:
-      - '8080:80'
+      - '8000:80'
     volumes:
-      - ./laravel-project:/var/www/laravel-project
-      - ./docker/php-fpm/php.ini:/usr/local/etc/php/php.ini
-      - vendor-volume:/var/www/laravel-project/vendor # 動作が遅いことへの対策
-      - storage-volume:/var/www/laravel-project/storage  # 動作が遅いことへの対策
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ./back:/var/www/back # 動作が遅いことへの対策 初回のdockerのbuild後、こちらのコメントアウトを外す
+      - vendor-volume:/var/www/back/vendor # 動作が遅いことへの対策 laravelのプロジェクト作成後、コメントアウトを外す
+      - storage-volume:/var/www/back/storage  # 動作が遅いことへの対策 laravelのプロジェクト作成後、コメントアウトを外す
     depends_on:
-      - postgres
+      - db
 
-  postgres:
+  db:
     image: postgres:14
+    container_name: db
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -23,7 +24,7 @@ services:
       POSTGRES_DB: main
       TZ: "Asia/Tokyo"
     ports:
-      - 5432:5432 #MySQLと違うので注意
+      - 5432:5432
     volumes:
       - ./docker/postgres/data:/var/lib/postgresql/data
       - ./docker/postgres/logs:/var/log
