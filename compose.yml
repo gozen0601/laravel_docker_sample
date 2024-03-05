@@ -7,9 +7,9 @@ services:
       - '8000:80'
     volumes:
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
-      - ./back:/var/www/back # 動作が遅いことへの対策 初回のdockerのbuild後、こちらのコメントアウトを外す
-      - vendor-volume:/var/www/back/vendor # 動作が遅いことへの対策 laravelのプロジェクト作成後、コメントアウトを外す
-      - storage-volume:/var/www/back/storage  # 動作が遅いことへの対策 laravelのプロジェクト作成後、コメントアウトを外す
+      # - ./back:/var/www/back # 動作が遅いことへの対策 初回のdockerのbuild後、こちらのコメントアウトを外す
+      # - vendor-volume:/var/www/back/vendor # 動作が遅いことへの対策 laravelのプロジェクト作成後、コメントアウトを外す
+      # - storage-volume:/var/www/back/storage  # 動作が遅いことへの対策 laravelのプロジェクト作成後、コメントアウトを外す
     depends_on:
       - db
 
